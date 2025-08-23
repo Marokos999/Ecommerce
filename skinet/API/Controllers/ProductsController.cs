@@ -12,8 +12,6 @@ namespace API.Controllers;
 [Route("api/[controller]")]
 public class ProductsController(IGenericRepository<Product> repo) : ControllerBase
 {
-    
-
     [HttpGet]
     public async Task<ActionResult<IReadOnlyList<Product>>> GetProduct(string? brand, string? type, string? sort)
     {
@@ -25,7 +23,7 @@ public class ProductsController(IGenericRepository<Product> repo) : ControllerBa
     [HttpGet("{id:int}")]
     public async Task<ActionResult<Product>> GetById(int id)
     {
-        var product = await repo.GetByIdAsync(id);
+        Product? product = await repo.GetByIdAsync(id);
 
         if (product == null) return NotFound();
 
@@ -55,7 +53,7 @@ public class ProductsController(IGenericRepository<Product> repo) : ControllerBa
     [HttpDelete("{id:int}")]
     public async Task<ActionResult> DeleteProduct(int id)
     {
-        var product = await repo.GetByIdAsync(id);
+        Product? product = await repo.GetByIdAsync(id);
         if (product is null) return NotFound();
 
         repo.Delete(product);

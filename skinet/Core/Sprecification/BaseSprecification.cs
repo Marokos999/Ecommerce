@@ -20,3 +20,11 @@ public class BaseSprecification<T>(Expression<Func<T, bool>>? criteria) : ISpeci
     protected void AddOrderByDescending(Expression<Func<T, object>> orderByDescExpression) =>
         OrderByDescending = orderByDescExpression;
 }
+
+public class BaseSprecification<T, TResult>(Expression<Func<T, bool>>? criteria) : BaseSprecification<T>(criteria), ISpecification<T, TResult>
+{
+    public Expression<Func<T, TResult>>? Select { get; private set; }
+
+    protected void AddSelect(Expression<Func<T, TResult>> selectExpression) =>
+        Select = selectExpression;
+}
