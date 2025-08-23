@@ -67,14 +67,15 @@ public class ProductsController(IGenericRepository<Product> repo) : ControllerBa
     public async Task<ActionResult<IReadOnlyList<string>>> GetProductBrands()
     {
         //TODO: Implement GetBrandsAsync in GenericRepository
-
-        return Ok();
+        BrandListSpecification? spec = new BrandListSpecification();
+        return Ok(await repo.ListAsync(spec));
     }
     [HttpGet("types")]
     public async Task<ActionResult<IReadOnlyList<string>>> GetProductTypes()
     {
         //TODO: Implement GetTypesAsync in GenericRepository
-        return Ok();
+        TypeListSpecification? spec = new TypeListSpecification();
+        return Ok(await repo.ListAsync(spec));
     }
     private bool ProductExists(int id)
     {

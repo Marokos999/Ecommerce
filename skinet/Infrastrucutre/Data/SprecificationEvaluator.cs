@@ -20,6 +20,10 @@ public class SprecificationEvaluator<T> where T : BaseEntity
         {
             query = query.OrderByDescending(spec.OrderByDescending);
         }
+        if (spec.IsDistinct)
+        {
+            query = query.Distinct();
+        }
 
         return query;
     }
@@ -46,6 +50,10 @@ public class SprecificationEvaluator<T> where T : BaseEntity
         {
             selectQuery = query.Select(spec.Select);
             
+        }
+        if (spec.IsDistinct && selectQuery is not null)
+        {
+            selectQuery = selectQuery.Distinct();
         }
 
         return selectQuery ?? query.Cast<TResult>();
