@@ -4,12 +4,12 @@ namespace Core.Sprecification;
 
 public class ProductSprecification : BaseSprecification<Product>
 {
-    public ProductSprecification(string? brand, string? type, string? sort)
+    public ProductSprecification(ProductSprecParams sprecParams)
          : base(p =>
-            (string.IsNullOrWhiteSpace(brand) || p.Brand == brand) &&
-            (string.IsNullOrWhiteSpace(type) || p.Type == type))
+            (!sprecParams.Brands.Any() || sprecParams.Brands.Contains(p.Brand)) &&
+            (!sprecParams.Types.Any() || sprecParams.Types.Contains(p.Type)))
     {
-        switch (sort)
+        switch (sprecParams.Sort)
         {
             case "priceasc":
                 AddOrderBy(p => p.Price);

@@ -13,9 +13,9 @@ namespace API.Controllers;
 public class ProductsController(IGenericRepository<Product> repo) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<IReadOnlyList<Product>>> GetProduct(string? brand, string? type, string? sort)
+    public async Task<ActionResult<IReadOnlyList<Product>>> GetProduct([FromQuery]ProductSprecParams sprecParams)
     {
-        ProductSprecification spec = new ProductSprecification(brand, type, sort);
+        ProductSprecification spec = new ProductSprecification(sprecParams);
         IReadOnlyList<Product> product = await repo.ListAsync(spec);
         return Ok(product);
     }
@@ -66,14 +66,12 @@ public class ProductsController(IGenericRepository<Product> repo) : ControllerBa
     [HttpGet("brands")]
     public async Task<ActionResult<IReadOnlyList<string>>> GetProductBrands()
     {
-        //TODO: Implement GetBrandsAsync in GenericRepository
         BrandListSpecification? spec = new BrandListSpecification();
         return Ok(await repo.ListAsync(spec));
     }
     [HttpGet("types")]
     public async Task<ActionResult<IReadOnlyList<string>>> GetProductTypes()
     {
-        //TODO: Implement GetTypesAsync in GenericRepository
         TypeListSpecification? spec = new TypeListSpecification();
         return Ok(await repo.ListAsync(spec));
     }
