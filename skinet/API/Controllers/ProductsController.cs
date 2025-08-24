@@ -1,3 +1,4 @@
+using API.RequestHelpers;
 using Core.Entities;
 using Core.Interfaces;
 using Core.Sprecification;
@@ -17,7 +18,9 @@ public class ProductsController(IGenericRepository<Product> repo) : ControllerBa
     {
         ProductSprecification spec = new ProductSprecification(sprecParams);
         IReadOnlyList<Product> product = await repo.ListAsync(spec);
-        return Ok(product);
+        var countSpec = await repo.CountAsync(spec);
+        Pagination<Product> pagination = new Pagination<Product>(sprecParams.PageIndex, sprecParams.PageSize, countSpec, product);
+        return Ok(pagination);
     }
 
     [HttpGet("{id:int}")]

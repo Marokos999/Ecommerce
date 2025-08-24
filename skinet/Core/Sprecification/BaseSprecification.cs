@@ -22,6 +22,13 @@ public class BaseSprecification<T>(Expression<Func<T, bool>>? criteria) : ISpeci
 
     public bool IsPagingEnabled { get; private set; }
 
+    public IQueryable<T> ApplyCriteria(IQueryable<T> query)
+    {
+        if (Criteria != null)
+            query = query.Where(Criteria);
+        return query;
+    }
+
     protected void AddOrderBy(Expression<Func<T, object>> orderByExpression) =>
         OrderBy = orderByExpression;
 
