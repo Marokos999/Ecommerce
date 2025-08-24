@@ -6,6 +6,7 @@ public class ProductSprecification : BaseSprecification<Product>
 {
     public ProductSprecification(ProductSprecParams sprecParams)
          : base(p =>
+            (string.IsNullOrEmpty(sprecParams.Search) || p.Name.ToLower().Contains(sprecParams.Search)) &&
             (!sprecParams.Brands.Any() || sprecParams.Brands.Contains(p.Brand)) &&
             (!sprecParams.Types.Any() || sprecParams.Types.Contains(p.Type)))
     {
