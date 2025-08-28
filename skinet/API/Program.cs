@@ -6,32 +6,40 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
+// Services
 builder.Services.AddControllers();
 
 builder.Services.AddDbContext<StoreContext>(opt =>
 {
     opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-builder.Services.AddCors();
 
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularDev", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200", "https://localhost:4200")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Middleware redosled
+app.UseMiddleware<ExceptionMiddleware>();   // rano, da hvata greške
+app.UseHttpsRedirection();
 
+
+app.UseCors("AllowAngularDev");
 
 app.MapControllers();
 
-app.UseMiddleware<ExceptionMiddleware>();
-app.UseCors(opt =>
-{
-    opt.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:4200, https://localhost:4200");
-});
-
+// DB migrate/seed
 try
 {
     using var scope = app.Services.CreateScope();
