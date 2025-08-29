@@ -50,9 +50,13 @@ export class ShopComponent implements OnInit {
   dialogRef.afterClosed().subscribe({
     next: result => {
       if(result){
+        console.log(result);
         this.selectedBrands = result.selectedBrands;
         this.selectedTypes = result.selectedTypes;
-        
+        this.shopService.getProducts(this.selectedBrands, this.selectedTypes).subscribe({
+          next: response => this.products = response.data,
+          error: error => console.log(error)
+        });
       }
     }
   });
@@ -65,5 +69,5 @@ export class ShopComponent implements OnInit {
 
 
 
-
+ 
 }
