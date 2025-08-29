@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { HeaderComponent } from './layout/header/header.component';
-import { ShopComponent } from "./fearures/shop/shop.component";
+import { ShopComponent } from "./features/shop/shop.component";
 
 @Component({
   selector: 'app-root',
