@@ -27,7 +27,8 @@ export class ShopService {
       params = params.set('sort', shopParams.sort);
     } 
 
-    params = params.set('pageSize', 20);
+    params = params.set('pageSize', shopParams.pageSize);
+    params = params.set('pageNumber', shopParams.pageNumber);
     return this.http.get<Pagination<Product>>(this.baseUrl + 'products', {params});
   }
 
