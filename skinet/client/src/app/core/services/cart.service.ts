@@ -1,8 +1,34 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
+import { environment } from '../../../environments/environment';
+import { HttpClient } from '@angular/common/http';
+import { Cart } from '../../shared/models/cart';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CartService {
-  
+  baseUrl = environment.apiUrl;
+  private http = inject(HttpClient);
+  cart = signal<Cart | null>(null);
+
+
+  getCart() {
+    return this.http.get<Cart>(this.baseUrl + 'cart?id').subscribe({
+      next: cart => this.cart.set(cart),
+      error: error => console.log(error)
+    });
+  }
+  setCart(cart: Cart) {
+    return this.http.post<Cart>(this.baseUrl + 'cart', cart).subscribe({
+      next: cart => this.cart.set(cart),
+      error: error => console.log(error)
+    });
+  }
+
+  deleteCart(id: string) {
+    return this.http.delete(this.baseUrl + 'cart?id=' + id).subscribe({
+      next: () => this.cart.set(null),
+      error: error => console.log(error)
+    });
+  }
 }
