@@ -1,6 +1,6 @@
 import { HttpErrorResponse, HttpEvent ,HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationExtras, Router } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
 import { SnackbarService } from '../services/snackbar.service';
 
@@ -31,8 +31,8 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         route.navigateByUrl('/not-found');
       }
       if(err.status === 500) {
-        const navigationExtras = {state: {error: err.error}};
-        route.navigateByUrl('/server-error', navigationExtras);
+        const navigationsExtras: NavigationExtras = {state: {error: err.error}};
+        route.navigateByUrl('/server-error', navigationsExtras);
       }
       
       return throwError(() => err);
