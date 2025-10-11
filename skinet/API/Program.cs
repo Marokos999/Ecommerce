@@ -1,4 +1,5 @@
 using API.Middleware;
+using Core.Entities;
 using Core.Interfaces;
 using Infrastrucutre;
 using Infrastrucutre.Data;
@@ -40,6 +41,9 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(config =>
 });
 
 builder.Services.AddSingleton<ICartService, CartService>();
+builder.Services.AddAuthorization();
+builder.Services.AddIdentityApiEndpoints<AppUser>()
+        .AddEntityFrameworkStores<StoreContext>();
 
 var app = builder.Build();
 
@@ -51,6 +55,7 @@ app.UseHttpsRedirection();
 app.UseCors("AllowAngularDev");
 
 app.MapControllers();
+app.MapIdentityApi<AppUser>();
 
 // DB migrate/seed
 try
