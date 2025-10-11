@@ -58,6 +58,34 @@ totals = computed(() => {
     }
 
   }
+
+  removeItemFromCart(productId: number, quantity = 1) {
+    const cart = this.cart();
+    if(!cart) return;
+    const index = cart.items.findIndex(x => x.productId == productId );
+    if(index !== -1){
+      if(cart.items[index].quantity > quantity) {
+        cart.items[index].quantity -= quantity;
+      } else {
+        cart.items.splice(index, 1);
+      }
+      if(cart.items.length === 0){
+        this.deleteCart();
+      } else{
+        this.setCart(cart);
+      }
+    }
+  }
+  
+  deleteCart() {
+    this.http.delete(this.baseUrl + 'cart?id=' + this.cart()?.id).subscribe({
+      next: () => {
+        localStorage.removeItem('cart_id');
+        this.cart.set(null);
+      }      
+    });
+  }
+
   private addOrUpdateItem(items: CartItem[], item: CartItem, quantity: number): CartItem[] {
     const index = items.findIndex(i => i.productId === item.productId);
     if (index === -1) {
