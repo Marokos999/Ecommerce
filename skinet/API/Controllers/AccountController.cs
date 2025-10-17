@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace API.Controllers;
 
 public class AccountController(SignInManager<AppUser> signInManager) : BaseApiController
@@ -65,6 +66,29 @@ public class AccountController(SignInManager<AppUser> signInManager) : BaseApiCo
     [HttpGet]
     public IActionResult GetOfState()
     {
-        return Ok(new {IsAuthenticated = User.Identity?.IsAuthenticated ?? false});
+        return Ok(new { IsAuthenticated = User.Identity?.IsAuthenticated ?? false });
     }
+    
+    [Authorize]
+    [HttpPost("address")]
+    public async Task<ActionResult<AddressDTO>> CreateOrUpdateAddress(AddressDTO addressDto)
+    {
+        var user = await signInManager.UserManager.GetUserByEmailWithAddress(User);
+
+        if (user.Address == null)
+        {
+            user.Address = addressDto.ToAddressEntity();
+        }
+        else
+        {
+            user.Address.UpdateFromDto(addressDto);
+        }
+
+        var result = await signInManager.UserManager.UpdateAsync(user);
+
+        if (!result.Succeeded) return BadRequest("Problem updating the user address");
+
+        return Ok(AddressMappingExtensions.toAddressDto(user.Address));
+    }
+
 }
