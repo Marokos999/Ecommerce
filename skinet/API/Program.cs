@@ -55,7 +55,7 @@ app.UseHttpsRedirection();
 app.UseCors("AllowAngularDev");
 
 app.MapControllers();
-app.MapIdentityApi<AppUser>();
+app.MapGroup("api").MapIdentityApi<AppUser>();
 
 // DB migrate/seed
 try
