@@ -92,3 +92,7 @@ public class AccountController(SignInManager<AppUser> signInManager) : BaseApiCo
     }
 
 }
+
+
+
+// End of Identity API
