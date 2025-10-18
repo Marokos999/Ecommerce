@@ -53,14 +53,13 @@ public class AccountController(SignInManager<AppUser> signInManager) : BaseApiCo
     {
         if (User.Identity?.IsAuthenticated == false) return NoContent();
 
-        var user = await signInManager.UserManager.GetUserByEmailWithAddress(User);
+        var user = await signInManager.UserManager.GetUserByEmail(User);
 
         return Ok(new
         {
             user.FirstName,
             user.LastName,
-            user.Email,
-            Address = AddressMappingExtensions.ToAddressDto(user?.Address)
+            user.Email
         });
     }
 
@@ -89,7 +88,7 @@ public class AccountController(SignInManager<AppUser> signInManager) : BaseApiCo
 
         if (!result.Succeeded) return BadRequest("Problem updating the user address");
 
-        return Ok(AddressMappingExtensions.ToAddressDto(user.Address));
+        return Ok(AddressMappingExtensions.toAddressDto(user.Address));
     }
 
 }
