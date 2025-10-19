@@ -27,8 +27,14 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins("http://localhost:4200", "https://localhost:4200")
               .AllowAnyHeader()
-              .AllowAnyMethod();
+              .AllowAnyMethod()
+              .AllowCredentials();
     });
+});
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Cookie.SameSite = SameSiteMode.None;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
 });
 
 builder.Services.AddSingleton<IConnectionMultiplexer>(config =>
@@ -53,6 +59,7 @@ app.UseHttpsRedirection();
 
 
 app.UseCors("AllowAngularDev");
+
 
 app.MapControllers();
 app.MapGroup("api").MapIdentityApi<AppUser>();

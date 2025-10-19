@@ -13,8 +13,8 @@ export class AccountService {
 
   login(values: any) {
     let params = new HttpParams();
-    params = params.append('useCookies', true);
-    return this.http.post<User>(this.baseUrl + 'login', values, {params});
+    params = params.append('useCookies', 'true');
+    return this.http.post<User>(this.baseUrl + 'login', values, {params, withCredentials: true});
   }
 
   register(values: any) {
@@ -22,7 +22,7 @@ export class AccountService {
   }
 
   getUserInfo(){
-    return this.http.get<User>(this.baseUrl + 'account/user-info').subscribe({
+    return this.http.get<User>(this.baseUrl + 'account/user-info', {withCredentials: true}).subscribe({
       next: user => {
         this.currentUser.set(user);
       }
@@ -30,11 +30,7 @@ export class AccountService {
   }
 
   logout() {
-    return this.http.post(this.baseUrl + 'account/logout', {}).subscribe({
-      next: () => {
-        this.currentUser.set(null);
-      }
-    });
+    return this.http.post(this.baseUrl + 'account/logout', {withCredentials: true});
   }
 
   updateAddress(address: Address) {
