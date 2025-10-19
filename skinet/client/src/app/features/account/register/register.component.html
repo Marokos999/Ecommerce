@@ -6,18 +6,33 @@
         <mat-form-field appearance="outline" class="w-full mb-4">
             <mat-label>First Name</mat-label>
             <input formControlName="firstName" type="text" placeholder="First Name" matInput/>
+            @if(registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched){
+                <mat-error>First Name is required</mat-error>
+            }
         </mat-form-field>
         <mat-form-field appearance="outline" class="w-full mb-4">
             <mat-label>Last Name</mat-label>
             <input formControlName="lastName" type="text" placeholder="Last Name" matInput/>
+            @if(registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched){
+                <mat-error>First Name is required</mat-error>
+            }
         </mat-form-field>
         <mat-form-field appearance="outline" class="w-full mb-4">
             <mat-label>Email address</mat-label>
             <input formControlName="email" type="email" placeholder="mane@examle.com" matInput/>
+            @if(registerForm.get('email')?.hasError('required') && registerForm.get('email')?.touched){
+                <mat-error>Email is required</mat-error>
+            }
+            @if(registerForm.get('email')?.hasError('email') && registerForm.get('email')?.touched){
+                <mat-error>Please enter a valid email address</mat-error>
+            }
         </mat-form-field>
         <mat-form-field appearance="outline" class="w-full mb-4">
-            <mat-label>Email address</mat-label>
+            <mat-label>Password</mat-label>
             <input formControlName="password" type="password" placeholder="password" matInput/>
+            @if(registerForm.get('password')?.invalid && registerForm.get('password')?.touched){
+                <mat-error>Password is required</mat-error>
+            }
         </mat-form-field>
 
         @if(validationErrors){
@@ -30,7 +45,13 @@
             </div>
         }
 
-        <button mat-flat-button type="submit" class="w-full py-2">Register</button>
+        <button
+         mat-flat-button
+          type="submit"
+           class="w-full py-2"
+           [disabled]="registerForm.invalid">
+           Register
+        </button>
     </form>
 </mat-card>
 
