@@ -28,6 +28,7 @@ private fb = inject(FormBuilder);
 private accService = inject(AccountService);
 private router = inject(Router);
 private snack = inject(SnackbarService);
+validationErrors?: string[];
 
 
 registerForm = this.fb.group({
@@ -43,8 +44,19 @@ onSubmit() {
     next: () => {
       this.snack.success('Registration successful! Please log in.');
       this.router.navigateByUrl('/account/login');
+    },
+    error: (error) => {
+      this.validationErrors = error;
     }
+    
   }); 
 }
+
+
+
+
+
+
+
 
 }
