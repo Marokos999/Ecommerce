@@ -2,10 +2,11 @@ import { Component, inject } from '@angular/core';
 import {MatIcon} from '@angular/material/icon';
 import {MatButton} from '@angular/material/button';
 import {MatBadge} from '@angular/material/badge';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { BusyService } from '../../core/services/busy.service';
 import {MatProgressBar} from '@angular/material/progress-bar';
 import { CartService } from '../../core/services/cart.service';
+import { AccountService } from '../../core/services/account.service';
 @Component({
   selector: 'app-header',
   standalone: true,
@@ -23,4 +24,15 @@ import { CartService } from '../../core/services/cart.service';
 export class HeaderComponent {
  busyService = inject(BusyService);
  cartSerice = inject(CartService);
+ accService = inject(AccountService);
+ private router = inject(Router);
+
+ logout() {
+  this.accService.logout().subscribe({
+    next: () => {
+     this.accService.currentUser.set(null);
+      this.router.navigateByUrl('/'); 
+    }
+  });
+ }
 }
